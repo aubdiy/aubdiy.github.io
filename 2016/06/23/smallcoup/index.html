@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>smallcoup | small coup 个人博客</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.1.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">smallcoup</h1><a id="logo" href="/.">small coup 个人博客</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">smallcoup</h1><div class="post-meta">Jun 23, 2016<span> | </span><span class="category"><a href="/categories/基础/">基础</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="2016/06/23/smallcoup/" href="/2016/06/23/smallcoup/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><h2 id="飞凡BI3-0-随机立减统计"><a href="#飞凡BI3-0-随机立减统计" class="headerlink" title="飞凡BI3.0 随机立减统计"></a>飞凡BI3.0 随机立减统计</h2><p>随机立减是飞凡APP支付的主要功能之一, 用户通过飞凡卡支付,可以享受随机减免部分金额的优惠</p>
+<h2 id="统计维度"><a href="#统计维度" class="headerlink" title="统计维度"></a>统计维度</h2><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stat_date</td>
+<td>string</td>
+<td>格式：yyyyMMdd</td>
+</tr>
+<tr>
+<td>stat_hour</td>
+<td>string</td>
+<td>格式：yyyyMMddHH</td>
+</tr>
+<tr>
+<td>stat_minute</td>
+<td>string</td>
+<td>格式：yyyyMMddHHmm</td>
+</tr>
+</tbody>
+</table>
+<h2 id="统计指标"><a href="#统计指标" class="headerlink" title="统计指标"></a>统计指标</h2><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>描述</th>
+<th>口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pay_uv</td>
+<td>long</td>
+<td>触发减免规则的的用户数</td>
+<td>统计”is_locked”为1,且”is_committed”为0的记录数,使用”uid”排重</td>
+</tr>
+<tr>
+<td>pay_cnt</td>
+<td>long</td>
+<td>触发减免规则的所有支付的笔数</td>
+<td>统计”is_locked”为1,且”is_committed”为0的记录数</td>
+</tr>
+<tr>
+<td>pay_amt</td>
+<td>long</td>
+<td>触发减免规则的的所有支付的总金额(单位：分)</td>
+<td>统计”is_locked”为1,且”is_committed”为0的记录中”amount”的和</td>
+</tr>
+<tr>
+<td>success_uv</td>
+<td>long</td>
+<td>触发减免规则且支付完成的用户数</td>
+<td>统计”is_locked”为1,且”is_committed”为1的记录数,使用”uid”排重</td>
+</tr>
+<tr>
+<td>success_cnt</td>
+<td>long</td>
+<td>触发减免规则且支付完成的所有交易笔数</td>
+<td>统计”is_locked”为1,且”is_committed”为1的记录数</td>
+</tr>
+<tr>
+<td>success_discount_amt</td>
+<td>long</td>
+<td>触发减免规则且支付完成所减免的金额总和(单位：分)</td>
+<td>统计”is_locked”为1,且”is_committed”为0的记录中”minus”的和</td>
+</tr>
+</tbody>
+</table>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><h3 id="redis中数据"><a href="#redis中数据" class="headerlink" title="redis中数据"></a>redis中数据</h3><p>数据结构:string</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffan_bi3_random_discount|$&#123;时间(天,时,分)&#125;|$&#123;指标&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="mysql中数据-可选"><a href="#mysql中数据-可选" class="headerlink" title="mysql中数据(可选)"></a>mysql中数据(可选)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`a06_ffan_bi3_random_discount_realtime`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT <span class="keyword">COMMENT</span> <span class="string">'自增主键'</span>,</span><br><span class="line">  <span class="string">`stat_date`</span> <span class="built_in">date</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'统计日期：20160101'</span>,</span><br><span class="line">  <span class="string">`pay_uv`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'触发减免规则的的用户数'</span>,</span><br><span class="line">  <span class="string">`pay_cnt`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'触发减免规则的所有支付的笔数'</span>,</span><br><span class="line">  <span class="string">`pay_amt`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'触发减免规则的的所有支付的总金额'</span>,</span><br><span class="line">  <span class="string">`success_uv`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'触发减免规则且支付完成的用户数'</span>,</span><br><span class="line">  <span class="string">`success_cnt`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'触发减免规则且支付完成的所有交易笔数'</span>,</span><br><span class="line">  <span class="string">`success_discount_amt`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'触发减免规则且支付完成所减免的金额总和'</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">UNIQUE</span> <span class="keyword">KEY</span> <span class="string">`main`</span> (<span class="string">`stat_date`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8 <span class="keyword">COMMENT</span>=<span class="string">'飞凡BI3.0 随机立减统计'</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="拓扑概述"><a href="#拓扑概述" class="headerlink" title="拓扑概述"></a>拓扑概述</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KafkaSpout(随机立减数据) --&gt; 实时多维统计组件</span><br></pre></td></tr></table></figure>
+<h2 id="部署方案"><a href="#部署方案" class="headerlink" title="部署方案"></a>部署方案</h2><ul>
+<li><p>本地环境编译命令</p>
+<ul>
+<li>mvn clean compile</li>
+</ul>
+</li>
+<li><p>测试环境打包命令</p>
+<ul>
+<li>mvn clean package -P test -Dtopology.class=cn.wanda.bigdata.etl.ffan.bi3.random.discount.RandomDiscountTopology</li>
+</ul>
+</li>
+<li><p>生产环境打包命令</p>
+<ul>
+<li>mvn clean package -P online -Dtopology.class=cn.wanda.bigdata.etl.ffan.bi3.random.discount.RandomDiscountTopology</li>
+</ul>
+</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2016/06/23/smallcoup/" data-id="cips1xpmy0002ww8m8uf4r8rz" class="article-share-link">分享到</a><div class="tags"><a href="/tags/small/">small</a><a href="/tags/coup/">coup</a><a href="/tags/smallcoup/">smallcoup</a></div><div class="post-nav"><a href="/2016/06/23/logback-base/" class="pre">logback-base</a><a href="/2016/06/23/hello-world/" class="next">Hello World</a></div><div id="disqus_thread"><script>var disqus_shortname = 'smallcoup';
+var disqus_identifier = '2016/06/23/smallcoup/';
+var disqus_title = 'smallcoup';
+var disqus_url = 'http://yoursite.com/2016/06/23/smallcoup/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//smallcoup.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://yoursite.com"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/LOG/">LOG</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础/">基础</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/small/" style="font-size: 15px;">small</a> <a href="/tags/coup/" style="font-size: 15px;">coup</a> <a href="/tags/smallcoup/" style="font-size: 15px;">smallcoup</a> <a href="/tags/log/" style="font-size: 15px;">log</a> <a href="/tags/logback/" style="font-size: 15px;">logback</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/06/23/logback-base/">logback-base</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/23/smallcoup/">smallcoup</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/23/hello-world/">Hello World</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//smallcoup.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://blog.csdn.net/aubdiy" title="CSDN同步更新" target="_blank">CSDN同步更新</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">small coup 个人博客.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?a15878279e12a8387fa86ebd7bc5625d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
